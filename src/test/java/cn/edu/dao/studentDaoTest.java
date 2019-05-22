@@ -25,12 +25,9 @@ public class studentDaoTest {
            // student studentList=studentDao.inquireallByid(3016001);
             //List<student> cidlist = studentDao.getMoreTrim(null,null,null,"软工1班");
             List<student> studentList = new ArrayList<student>();
-            studentList.add(new student(3016011,"刘德华",1, new GregorianCalendar(1980, Calendar.FEBRUARY, 11).getTime(),"软工2班",null));
-            studentList.add(new student(3016014,"许嵩",1, new GregorianCalendar(1984, Calendar.MAY, 11).getTime(),"软工4班",null));
-            List<String> ids= new ArrayList<String>();
-            ids.add("3016011");
-            ids.add("3016014");
-            System.out.println(studentDao.deleteMore(new String[]{"3016010","3016009"}));
+            studentList.add(new student(3016011,"刘德华",null, new GregorianCalendar(1980, Calendar.FEBRUARY, 11).getTime(),"软工2班",null));
+            studentList.add(new student(3016014,"许嵩",1,null,"软工4班",null));
+            System.out.println(studentDao.inquireallByid(3016009));
             session.commit();
         } catch (IOException e) {
             e.printStackTrace();

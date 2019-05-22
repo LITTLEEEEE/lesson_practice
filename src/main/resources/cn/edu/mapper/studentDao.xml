@@ -111,8 +111,42 @@
     <!--public int addMore(List<Student> listStudent) ;-->
     <insert id="addMore" parameterType="student">
         insert into student(sid,sname,birthday,gender,classname)values 
-        <foreach collection="listStudent" item="student" separator=",">
-            (#{student.sid},#{student.sname},#{student.birthday},#{student.gender},#{student.classname})
+        <foreach collection="listStudent" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.sid},
+                <choose>
+                    <when test="item.sname != null">
+                        #{item.sname},
+                    </when>
+                    <otherwise>
+                        null,
+                    </otherwise>
+                </choose>
+                <choose>
+                    <when test="item.birthday != null">
+                        #{item.birthday},
+                    </when>
+                    <otherwise>
+                        null,
+                    </otherwise>
+                </choose>
+                <choose>
+                    <when test="item.gender != null">
+                        #{item.gender},
+                    </when>
+                    <otherwise>
+                        null,
+                    </otherwise>
+                </choose>
+                <choose>
+                    <when test="item.classname != null">
+                        #{item.classname},
+                    </when>
+                    <otherwise>
+                        null,
+                    </otherwise>
+                </choose>
+            </trim>
         </foreach>
     </insert>
 
