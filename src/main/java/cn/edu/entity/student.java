@@ -1,19 +1,21 @@
 package cn.edu.entity;
 
+import org.apache.ibatis.annotations.Insert;
+
 import java.util.Date;
 import java.util.List;
 
 public class student {
     private int sid;
     private String sname;
-    private int gender;
+    private Integer gender;
     private Date birthday;
     private String classname;
     private List<course> courseLists;
     public student() {
     }
 
-    public student(int sid, String sname, int gender, Date birthday, String classname, List<course> courseLists) {
+    public student(int sid, String sname, Integer gender, Date birthday, String classname, List<course> courseLists) {
         this.sid = sid;
         this.sname = sname;
         this.gender = gender;
@@ -39,11 +41,11 @@ public class student {
         this.sname = sname;
     }
 
-    public int getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 
@@ -73,7 +75,7 @@ public class student {
                 ", birthday=" + birthday +
                 ", classname='" + classname + '\'' +
                 ", courseLists=" + courseLists +
-                '}';
+                '}'+'\n';
     }
 
     public List<course> getCourseLists() {

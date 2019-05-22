@@ -36,6 +36,7 @@
         inner join course on course.cid=score.cid
         where score.sid=#{sid};
     </select>
+    <!---->
     <resultMap id="allcourse" type="student">
         <id column="sid"  property="sid"/>
         <result column="sname" property="sname" />
@@ -50,7 +51,76 @@
         </collection>
     </resultMap>
 
+    <!--public List<student> getMore(@Param("nameKey")String nameKey , @Param("gender")String gender ,-->
+    <!--@Param("birthday")String birthday , @Param("classname")String classname) ;-->
+    <select id="getMore" resultType="student">
+        select * from student where 1=1
+        <if test="gender != null ">and gender = #{gender} </if>
+        <if test="birthday != null ">and birthday = #{birthday} </if>
+        <if test="classname != null ">and classname = #{classname} </if>
+        <if test="nameKey != null">
+            <bind name="nameLike" value="'%' + nameKey + '%'"/>
+               and sname like #{nameLike,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!--public List<student> getMoreTrim(@Param("nameKey")String nameKey , @Param("gender")String gender ,-->
+    <!--@Param("birth")String birth , @Param("className")String cName) ;-->
+    <select id="getMoreTrim" resultType="student">
+        select * from student
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="gender != null ">and gender = #{gender} </if>
+            <if test="birthday != null ">and birthday = #{birthday} </if>
+            <if test="classname != null ">and classname = #{classname} </if>
+            <if test="nameKey != null">
+                <bind name="nameLike" value="'%' + nameKey + '%'"/>
+                and sname like #{nameLike,jdbcType=VARCHAR}
+            </if>
+
+        </trim>
+
+    </select>
 
 
+    <!--public int update(@Param("student")student student) ;-->
+    <update id="update" parameterType="student">
+        update student
+        <set>
+            <if test="student.sname != null">sname=#{student.sname},</if>
+            <if test="student.gender != null">gender=#{student.gender},</if>
+            <if test="student.birthday != null">birthday=#{student.birthday},</if>
+            <if test="student.classname != null">classname=#{student.classname},</if>
+        </set>
+        where sid =#{student.sid}
+    </update>
 
+    <!--public int updateTrim(@Param("student")student student) ;-->
+    <update id="updateTrim" parameterType="student">
+        update student
+        <trim prefix="set" suffixOverrides=",">
+            <if test="student.sname != null">sname=#{student.sname},</if>
+            <if test="student.gender != null">gender=#{student.gender},</if>
+            <if test="student.birthday != null">birthday=#{student.birthday},</if>
+            <if test="student.classname != null">classname=#{student.classname},</if>
+        </trim>
+        <trim prefix="where">
+            sid=#{student.sid}
+        </trim>
+    </update>
+
+    <!--public int addMore(List<Student> listStudent) ;-->
+    <insert id="addMore" parameterType="student">
+        insert into student(sid,sname,birthday,gender,classname)values 
+        <foreach collection="listStudent" item="student" separator=",">
+            (#{student.sid},#{student.sname},#{student.birthday},#{student.gender},#{student.classname})
+        </foreach>
+    </insert>
+
+    <!--public int deleteMore(String[] ids) ;-->
+    <delete id="deleteMore" parameterType="java.util.List">
+        delete from student where sid in
+        <foreach collection="ids"  item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>
