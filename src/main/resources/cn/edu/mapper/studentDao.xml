@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.dao.studentDao">
+    <!--List<student> inquireBykeyname(String keyname);-->
+    <select id="inquireBykeyname" resultType="student">
+		select * from student where sname like "%" #{keyname} "%";
+	</select>
+
+    <!--List<student> inquireBycid(int cid);-->
+    <select id="inquireBycid" resultMap="ibcid">
+        select student.*,course.*,score.grade from student
+                inner join score on student.sid=score.sid
+                inner join course on course.cid=score.cid
+        where course.cid=#{cid};
+    </select>
+    <resultMap id="ibcid" type="student">
+        <id column="sid" property="sid"/>
+        <result column="sname" property="sname" />
+        <result column="gender" property="gender" />
+        <result column="birthday" property="birthday" />
+        <result column="classname" property="classname"/>
+        <collection  property="courseLists" column="" ofType="course">
+            <id column="cid" property="cid"/>
+            <result column="cname" property="cname"/>
+            <result column="credit" property="credit"/>
+            <result column="grade" property="score"/>
+        </collection>
+    </resultMap>
+
+    <!--student inquireallByid(int sid);-->
+    <select id="inquireallByid" resultMap="allcourse">
+        select student.*,course.*,score.grade from student
+        inner join score on student.sid=score.sid
+        inner join course on course.cid=score.cid
+        where score.sid=#{sid};
+    </select>
+    <resultMap id="allcourse" type="student">
+        <id column="sid"  property="sid"/>
+        <result column="sname" property="sname" />
+        <result column="gender" property="gender" />
+        <result column="birthday" property="birthday" />
+        <result column="classname" property="classname"/>
+        <collection property="courseLists" ofType="course">
+            <id column="cid" property="cid"/>
+            <result column="cname" property="cname"/>
+            <result column="credit" property="credit"/>
+            <result column="grade" property="score"/>
+        </collection>
+    </resultMap>
+
+
+
+
+</mapper>
